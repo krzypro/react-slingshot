@@ -14,8 +14,20 @@ jobs:
       - run:
           name: compile
           command: npm run lint
-
+  test:
+    docker:
+      - image: circleci/node:13.8.0
+    steps:
+      - checkout
+      - restore_cache:
+          keys:
+            - "npm-packages"
+      - run: npm i
+      - run: npm run test
 workflows:
   node-workflow:
     jobs:
       - build
+      - test:
+          requires:
+            build
